@@ -1,7 +1,6 @@
 
-
-#define DEFAULT_PORT 444 
 #define NUMBER_CONNECTIONS 1
+#define DEFAULT_PORT 444
 
 class CreateServerSocket {
 public:
@@ -39,7 +38,7 @@ public:
         }
     }
 
-    void InformationsAboutSocket() {
+    void InformationsAboutServerSocket() {
         if(serverSocket == INVALID_SOCKET) throw std::runtime_error("O servidor não foi criado.");
         
         struct sockaddr_in addrServer;
@@ -51,7 +50,9 @@ public:
         }else {
             throw std::runtime_error("Erro ao obter informações do servidor.");
         }
+    }
 
+    void InformationsAboutClientSocket() {
         struct sockaddr_in addrClient;
         int addrClient_len = sizeof(addrClient);
 
@@ -108,8 +109,8 @@ private:
         try {
             serverData.sin_family = AF_INET;
             serverData.sin_addr.s_addr = inet_addr(IP);
-            serverData.sin_port = htons(DEFAULT_PORT); 
-            }
+            serverData.sin_port = htons((int)DEFAULT_PORT); 
+        }
         catch(const std::exception& e) {
             throw std::runtime_error("Erro ao configurar os dados do servidor!");
         }

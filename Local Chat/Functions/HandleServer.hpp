@@ -3,9 +3,11 @@
 #include <regex>
 
 #include "../ServerSocket/CreateListenSocket.hpp"
+#include "../ClientSocket/CreateClientSocket.hpp"
 #include "./UtilsFunction.hpp"
 
-CreateServerSocket *ClassServerSocket;
+CreateServerSocket *ClassServerSocket = nullptr;
+CreateClientSocket *ClassClientSocket = nullptr;
 
 void* CreateConnectionServer(void* arg) {
     
@@ -24,6 +26,12 @@ bool CreateSocketInIp(const char* IP_HOST) {
         pthread_t ServerSocketThread;
         int iResult = 0;
     
+        if(ClassServerSocket != nullptr) 
+        {
+            delete ClassServerSocket;
+            ClassServerSocket = nullptr;
+        }
+
         pthread_create(&ServerSocketThread, NULL, CreateConnectionServer, (void *)IP_HOST);
         pthread_join(ServerSocketThread, NULL);
         

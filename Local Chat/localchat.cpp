@@ -15,53 +15,57 @@
 #include "Functions/HandleServer.hpp"
 #include "Functions/MessageOptions.hpp"
 
-void ManagePlayerChoise(int choise);
+void ManagePlayerChoice(int choice);
 
 bool leave = false;
-std::string username;
 
 int main()
 {
-    std::cout << "Bem vindo ao programa de chat. Digite seu usuario." << std::endl;
-    std::getline(std::cin, username);
-
     while(1) {
+        system("cls");
         ShowOptions();
 
-        int choise = GetInputToOption();
-        ManagePlayerChoise(choise);
+        int choice = GetInputToOption();
+        ManagePlayerChoice(choice);
 
-        if(leave) exit;
+        if(leave) return 1;
     }
     return 1;
 }
 
 
 
-void ManagePlayerChoise(int choise) {
+void ManagePlayerChoice(int choice) {
     std::string getIP;
     const char* IP_HOST;
+    bool SocketCreated = false;
 
-    switch(choise) {
+    switch(choice) {
         case 1:
             std::cout << "Testando a opcao de conectar";
-            // ConnectToPlayer();
+            GoNext();
             break;
         case 2:
             getIP = GetInputIp();
             if(getIP == ".") break;
 
             IP_HOST = getIP.c_str();
-            if(CreateSocketInIp(IP_HOST)) {
+            SocketCreated = CreateSocketInIp(IP_HOST);
                 
-            }
+            GoNext();
             break;
         case 3:
+            ShowDataServerClient();
+            GoNext();
+            break;
+        case 4:
             leave = true;
+            DeleteServerSocket();
             break;
         default:
             system("cls");
             std::cout << "Nenhuma opcao valida digitada.";
+            GoNext();
             break;
     }
 
