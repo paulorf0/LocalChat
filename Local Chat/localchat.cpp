@@ -12,46 +12,44 @@
 // Need to link with Ws2_32.lib
 #pragma comment(lib, "ws2_32.lib")
 
-#include "Functions/HandleServer.hpp"
-#include "Functions/MessageOptions.hpp"
+#include "Other_Functions//HandleServer.hpp"
+#include "Other_Functions//MessageOptions.hpp"
 
 void ManagePlayerChoice(int choice);
 
 bool leave = false;
 
-int main()
-{
-    while(1) {
+int main() {
+    while (1) {
         system("cls");
         ShowOptions();
 
         int choice = GetInputToOption();
         ManagePlayerChoice(choice);
 
-        if(leave) return 1;
+        if (leave) return 1;
     }
     return 1;
 }
 
 
-
 void ManagePlayerChoice(int choice) {
     std::string getIP;
-    const char* IP_HOST;
+    const char *IP_HOST;
     bool SocketCreated = false;
 
-    switch(choice) {
+    switch (choice) {
         case 1:
             std::cout << "Testando a opcao de conectar";
             GoNext();
             break;
         case 2:
             getIP = GetInputIp();
-            if(getIP == ".") break;
+            if (getIP == ".") break;
 
             IP_HOST = getIP.c_str();
             SocketCreated = CreateSocketInIp(IP_HOST);
-                
+
             GoNext();
             break;
         case 3:
