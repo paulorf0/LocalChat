@@ -5,6 +5,7 @@
 #define WIN32_LEAN_AND_MEAN
 
 #include <winsock2.h>
+#include <ws2tcpip.h>
 #include <stdio.h>
 
 
@@ -16,13 +17,22 @@
 
 void ManagePlayerChoise(int choise);
 
+bool leave = false;
+std::string username;
+
 int main()
 {
-    ShowOptions();
+    std::cout << "Bem vindo ao programa de chat. Digite seu usuario." << std::endl;
+    std::getline(std::cin, username);
 
-    int choise = GetInputToOption();
-    ManagePlayerChoise(choise);
+    while(1) {
+        ShowOptions();
 
+        int choise = GetInputToOption();
+        ManagePlayerChoise(choise);
+
+        if(leave) exit;
+    }
     return 1;
 }
 
@@ -47,7 +57,7 @@ void ManagePlayerChoise(int choise) {
             }
             break;
         case 3:
-            exit;
+            leave = true;
             break;
         default:
             system("cls");

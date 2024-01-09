@@ -5,48 +5,44 @@ const std::vector<std::string> options_game = {"Iniciar conexao com o chat.", "S
 
 bool CharIsNumber(char c) { return c > 48 && c < 57 ? true : false; }
 
+void CleanBuffer() {std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');}
+
 void ShowOptions()
 {
     std::size_t size_optionsGame = options_game.size();
 
     for (int i = 0; i < size_optionsGame; i++)
     {
-        std::cout << i + 1 << '.' << options_game[i] << '\n';
+        std::cout << i + 1 << '.' << options_game[i] << std::endl;
     }
 
-    std::cout << "Esperando resposta...\n";
+    std::cout << "Esperando resposta..." << std::endl;
 }
 
 int GetInputToOption()
 {
     std::size_t responsePlayer_size;
-    std::string responsePlayer;
+    char responsePlayer;
     bool anyError = false;
 
     do
     {
         anyError = false;
-        std::cin >> responsePlayer;
+        responsePlayer = getchar();
 
         system("cls");
 
-        responsePlayer_size = responsePlayer.length();
-
-        if (responsePlayer_size > 1)
+        
+        if (!CharIsNumber(responsePlayer))
         {
-            std::cout << "A resposta deve ser apenas o numero da opcao!\n";
+            std::cout << "Deve ser um numero." << std::endl;
+            std::cout << "-----------------" << std::endl;
+            ShowOptions();
             anyError = true;
             continue;
         }
 
-        if (!CharIsNumber(responsePlayer[0]))
-        {
-            std::cout << "Deve ser um numero.\n";
-            anyError = true;
-            continue;
-        }
+    } while (anyError);
 
-    } while (responsePlayer_size > 1 || anyError);
-
-    return responsePlayer[0] - '0';
+    return responsePlayer - '0';
 }

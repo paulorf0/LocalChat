@@ -28,8 +28,8 @@ bool CreateSocketInIp(const char* IP_HOST) {
         pthread_join(ServerSocketThread, NULL);
         
         system("cls");
-        std::cout << "A host foi criada com sucesso!\n";
-        std::cout << "\n---------------------\n\n";
+        std::cout << "A host foi criada com sucesso!" << std::endl;
+        std::cout << std::endl << "---------------------" << std::endl << std::endl;
         
         return true;
     }catch(const std::exception& e) {
