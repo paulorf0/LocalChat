@@ -1,21 +1,25 @@
-class CreateClientSocket {
+class ClassClientSocket
+{
 public:
-    CreteClientSocket(const char* IP, int SERVER_PORT = 444) {
-
+    ClassClientSocket(const char *IP, int SERVER_PORT = 444)
+    {
     }
 
 private:
     int PORT = 444;
 
-    sockaddr_in SetClientData(const char *IP) {
+    sockaddr_in SetClientData(const char *IP)
+    {
         struct sockaddr_in ClientData;
 
-        try {
+        try
+        {
             ClientData.sin_family = AF_INET;
             ClientData.sin_addr.s_addr = inet_addr(IP);
             ClientData.sin_port = htons(PORT);
         }
-        catch (const std::exception &e) {
+        catch (const std::exception &e)
+        {
             throw std::runtime_error("Erro ao configurar os dados para conectar ao servidor!");
         }
 
