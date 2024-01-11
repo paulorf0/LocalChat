@@ -4,6 +4,8 @@
 class ClassServerSocket
 {
 public:
+    SOCKET clientSocketAccepted = INVALID_SOCKET;
+
     ClassServerSocket(const char *IP_HOST)
     {
 
@@ -81,23 +83,22 @@ public:
         }
     }
 
-    void AcceptConnection()
-    {
-        clientSocketAccepted = accept(serverSocket, NULL, NULL);
-        if (clientSocketAccepted == INVALID_SOCKET)
-        {
-            closesocket(serverSocket);
-            WSACleanup();
-            throw std::runtime_error("Erro ao aceitar conexão do cliente.");
-        }
-    }
-
     void CloseConnectionWithClient()
     {
         if (closesocket(clientSocketAccepted) != 0)
         {
             throw std::runtime_error("Erro ao fechar conexão com cliente.");
         }
+    }
+
+    bool AcceptConnection()
+    {
+        clientSocketAccepted = accept(serverSocket, NULL, NULL);
+        if (clientSocketAccepted == INVALID_SOCKET)
+        {
+            return false;
+        }
+        return true;
     }
 
     ~ClassServerSocket()
@@ -110,7 +111,6 @@ public:
 private:
     WSADATA wsaData;
     SOCKET serverSocket = INVALID_SOCKET;
-    SOCKET clientSocketAccepted;
     int iResult = 0;
 
     void InitSocketWSA()

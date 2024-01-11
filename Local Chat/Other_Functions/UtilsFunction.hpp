@@ -124,6 +124,17 @@ void ShowDataServerClient()
     }
 }
 
+std::string GetUsername()
+{
+    std::string username;
+
+    std::cout << "Digite o username que deseja: " << std::endl;
+
+    std::getline(std::cin, username);
+
+    return username;
+}
+
 void DeleteServerSocket()
 {
     ServerSocket->~ClassServerSocket();
@@ -132,7 +143,7 @@ void DeleteServerSocket()
 bool GoNext()
 {
     char go;
-    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    // std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     std::cout << std::endl;
 
     go = std::getchar();
