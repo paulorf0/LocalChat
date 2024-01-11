@@ -2,7 +2,7 @@
 
 #include "UtilsFunction.hpp"
 
-void EnterChat(std::string ServerUsername, std::string ClientUsername);
+void EnterChat(int ServerOrClient);
 
 void ServerEnterChat()
 {
@@ -14,7 +14,6 @@ void ServerEnterChat()
 
     bool clientconnected = false;
     std::string serverUsername = GetUsername();
-    std::string clientUsername;
 
     if (ServerSocket->clientSocketAccepted != INVALID_SOCKET)
     {
@@ -35,26 +34,38 @@ void ServerEnterChat()
         return;
     }
 
-    EnterChat(serverUsername, clientUsername);
+    EnterChat(1);
 }
 
 void ClientEnterChat(std::string ServerIP)
 {
     // A lógica de enviar o nickname para o servidor deve ser implementada aqui.
-    ClientSocket->ClientConnectToServer((const char *)&ServerIP, clientUsername);
-    // Deve terminar a lógica.
+    std::string clientUsername = GetUsername();
+    try
+    {
+        ClientSocket->ClientConnectToServer((const char *)&ServerIP, clientUsername);
+    }
+    catch (std::exception &e)
+    {
+        std::cout << "Houve um erro na tentativa de conectar ao servidor";
+        return;
+    }
+    EnterChat(2);
 }
 
-void EnterChat(std::string ServerUsername, std::string ClientUsername)
+void EnterChat(int ServerOrClient)
 {
     bool connectInChat = true;
 
-    // Esse clientUsername ou serverusername deve ser capturado da classe de quem entrou no chat, para deixar generico!!!!!
-    // Retire esses argumentos. Capture do socket de quem entrou no chat.
-    // Uma verificação de por qual entrada foi colocada para entrar no chat resolveria.
+    if (ServerOrClient == 1)
+    {
+    }
+    else
+    {
+    }
     std::cout << "Chat de conversas. Se desejar sair da conversa, apenas digite !exit/" << std::endl;
-    std::cout << "O seu username é: " << ServerUsername << std::endl;
-    std::cout << "O username do outro é: " << ClientUsername << std::endl;
+    std::cout << "O seu username é: " << std::endl;
+    std::cout << "O username do outro é: " << std::endl;
 
     while (connectInChat)
     {

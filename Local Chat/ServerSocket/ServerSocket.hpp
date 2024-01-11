@@ -99,9 +99,15 @@ public:
             return false;
         }
 
-        int result;
+        serverUsername = ServerUsername;
         const char *username = (const char *)&ServerUsername;
-        result = send(clientSocketAccepted, username, strlen(username), 0);
+
+        do
+        {
+            iResult = send(clientSocketAccepted, username, strlen(username), 0);
+        } while (iResult != 0);
+
+        RecvUsername();
 
         return true;
     }
@@ -116,6 +122,8 @@ public:
 private:
     WSADATA wsaData;
     SOCKET serverSocket = INVALID_SOCKET;
+    std::string serverUsername = "default";
+    std::string clientUsername = "default";
     int iResult = 0;
 
     void InitSocketWSA()
@@ -125,6 +133,26 @@ private:
         if (iResult != 0)
         {
             throw std::runtime_error("Falha em inicializar WSAStartup");
+        }
+    }
+
+    void RecvUsername()
+    {
+        char buffer[1024];
+
+        iResult = recv(clientSocketAccepted, buffer, sizeof(buffer), 0);
+
+        if (iResult > 0)
+        {
+            serverUsername = std::string(buffer, iResult);
+        }
+        else if (iResult == 0)
+        {
+            throw std::runtime_error("Conexao fechada pelo outro lado.");
+        }
+        else
+        {
+            serverUsername = "default";
         }
     }
 

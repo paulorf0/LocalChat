@@ -5,6 +5,34 @@ public:
     {
     }
 
+    void ClientConnectToServer(const char *IP, std::string ClientUsername)
+    {
+        struct sockaddr_in service = SetClientData(IP);
+
+        iResult = connect(ConnectSocket, (SOCKADDR *)&service, sizeof(service));
+        if (iResult == SOCKET_ERROR)
+        {
+            iResult = closesocket(ConnectSocket);
+            if (iResult == SOCKET_ERROR)
+            {
+                throw std::runtime_error("Erro em fechar o scoket apos falha.");
+            }
+            WSACleanup();
+
+            throw std::runtime_error("Erro em conectar ao servidor");
+        }
+
+        RecvUsername();
+
+        clientUsername = ClientUsername;
+
+        const char *username = (const char *)&clientUsername;
+        do
+        {
+            iResult = send(ConnectSocket, username, strlen(username), 0);
+        } while (iResult != 0);
+    }
+
 protected:
     void InitWSA()
     {
@@ -26,31 +54,11 @@ protected:
         }
     }
 
-    void ClientConnectToServer(const char *IP, std::string ClientUsername)
-    {
-        struct sockaddr_in service = SetClientData(IP);
-
-        iResult = connect(ConnectSocket, (SOCKADDR *)&service, sizeof(service));
-        if (iResult == SOCKET_ERROR)
-        {
-            iResult = closesocket(ConnectSocket);
-            if (iResult == SOCKET_ERROR)
-            {
-                throw std::runtime_error("Erro em fechar o scoket apos falha.");
-            }
-            WSACleanup();
-
-            throw std::runtime_error("Erro em conectar ao servidor");
-        }
-
-        RecvUsername();
-        SendUsername(ClientUsername);
-    }
-
 private:
     WSADATA wsaData;
     SOCKET ConnectSocket;
     std::string serverUsername;
+    std::string clientUsername;
     int iResult = 0;
     const int PORT = 444;
 
@@ -72,10 +80,6 @@ private:
         {
             serverUsername = "default";
         }
-    }
-
-    void SendUsername(std::string ClientUsername)
-    {
     }
 
     sockaddr_in SetClientData(const char *IP)
