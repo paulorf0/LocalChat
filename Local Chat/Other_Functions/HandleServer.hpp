@@ -20,6 +20,18 @@ void CreateConnectionServer(const char *IP_HOST)
     }
 }
 
+bool CreateSocketClient()
+{
+    if (ServerSocket != nullptr)
+    {
+        std::cout << "Voce esta hosteando um chat no momento. Reinicie o programa.";
+        return false;
+    }
+
+    ClientSocket = new ClassClientSocket();
+    return true;
+}
+
 bool CreateServerSocketInIp(const char *IP_HOST)
 {
     try

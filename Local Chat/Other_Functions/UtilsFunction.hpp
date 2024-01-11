@@ -30,7 +30,7 @@ std::string GetInputIp()
 {
     while (1)
     {
-        std::cout << "Digite o IP para hostear (Geralmente o ip do radmin): " << std::endl;
+        std::cout << "Digite o IP (Geralmente o ip do radmin): " << std::endl;
         std::string IP;
         std::getline(std::cin, IP);
 

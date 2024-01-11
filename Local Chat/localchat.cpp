@@ -42,7 +42,17 @@ void ManagePlayerChoice(int choice)
     switch (choice)
     {
     case 1:
-        std::cout << "Testando a opcao de conectar";
+        if (!CreateSocketClient())
+        {
+            GoNext();
+            break;
+        }
+        getIP = GetInputIp();
+
+        if (getIP == ".")
+            break;
+
+        ClientEnterChat(getIP);
         GoNext();
         break;
     case 2:

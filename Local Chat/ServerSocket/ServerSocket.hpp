@@ -91,13 +91,18 @@ public:
         }
     }
 
-    bool AcceptConnection()
+    bool AcceptConnection(std::string ServerUsername)
     {
         clientSocketAccepted = accept(serverSocket, NULL, NULL);
         if (clientSocketAccepted == INVALID_SOCKET)
         {
             return false;
         }
+
+        int result;
+        const char *username = (const char *)&ServerUsername;
+        result = send(clientSocketAccepted, username, strlen(username), 0);
+
         return true;
     }
 

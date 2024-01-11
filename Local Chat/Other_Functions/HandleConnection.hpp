@@ -13,22 +13,20 @@ void ServerEnterChat()
     }
 
     bool clientconnected = false;
-    std::string username = GetUsername();
+    std::string serverUsername = GetUsername();
     std::string clientUsername;
 
     if (ServerSocket->clientSocketAccepted != INVALID_SOCKET)
     {
         std::cout << "O cliente ja esta conectado..." << std::endl;
         std::cout << "Entrando no chat..." << std::endl;
-        // Lógica para conexão no chat...
+        // Lógica para conexão no chat caso o cliente já esteja no chat...
         return;
     }
     else
     {
         std::cout << "Esperando a conexao do cliente...";
-        clientconnected = ServerSocket->AcceptConnection();
-        // De alguma maneira, quando o cliente for conectado, tenho que enviar o username que foi digitado.
-        // A lógica para enviar o server username para o cliente deve ser implementado aqui quando for aceitado.
+        clientconnected = ServerSocket->AcceptConnection(serverUsername);
     }
 
     if (!clientconnected)
@@ -37,28 +35,34 @@ void ServerEnterChat()
         return;
     }
 
-    EnterChat(username, clientUsername);
+    EnterChat(serverUsername, clientUsername);
 }
 
-void ClientEnterChat()
+void ClientEnterChat(std::string ServerIP)
 {
     // A lógica de enviar o nickname para o servidor deve ser implementada aqui.
+    ClientSocket->ClientConnectToServer((const char *)&ServerIP, clientUsername);
+    // Deve terminar a lógica.
 }
 
 void EnterChat(std::string ServerUsername, std::string ClientUsername)
 {
     bool connectInChat = true;
 
+    // Esse clientUsername ou serverusername deve ser capturado da classe de quem entrou no chat, para deixar generico!!!!!
+    // Retire esses argumentos. Capture do socket de quem entrou no chat.
+    // Uma verificação de por qual entrada foi colocada para entrar no chat resolveria.
     std::cout << "Chat de conversas. Se desejar sair da conversa, apenas digite !exit/" << std::endl;
     std::cout << "O seu username é: " << ServerUsername << std::endl;
     std::cout << "O username do outro é: " << ClientUsername << std::endl;
 
     while (connectInChat)
     {
-        // Creio que deve ter que usar thread para poder fazer duas tarefas ao mesmo tempo.
-        // Receber mensagem constantemente e poder enviar mensagem constantemente.
-        // Essa parte da lógica deve ser pensado cuidadosamente.
-        // Deve ser implementado tanto na parte cliente quanto na parte do servidor.
-        // Deve ser algo bem pensado, para que essa função possa ser reaproveitada para cliente e servidor.
+        std::string message;
     }
+}
+
+void HandlerChat()
+{
+    // Será uma função que ficara trocando entre enviar mensagem e receber a mensagem.
 }
