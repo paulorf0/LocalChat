@@ -47,7 +47,7 @@ void ClientEnterChat(std::string ServerIP)
     }
     catch (std::exception &e)
     {
-        std::cout << "Houve um erro na tentativa de conectar ao servidor";
+        std::cout << "Houve um erro na tentativa de conectar ao servidor: " << GetLastError();
         return;
     }
     EnterChat(2);

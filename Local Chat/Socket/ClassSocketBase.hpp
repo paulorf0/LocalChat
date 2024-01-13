@@ -11,6 +11,8 @@
 
 #pragma comment(lib, "ws2_32.lib")
 
+#define BUFFER_SIZE 1024
+
 class BaseSocket
 {
 protected:
@@ -18,7 +20,7 @@ protected:
 
     static std::string serverUsername;
     static std::string clientUsername;
-    static int port;
+    static int const port;
     static int const NUMBER_CONNECTIONS;
 
     WSADATA wsaData;
@@ -79,7 +81,7 @@ public:
 
     void RecvUsername()
     {
-        char buffer[1024];
+        char buffer[BUFFER_SIZE];
         if (ID_SOCKET == 1)
         {
             iResult = recv(OtherSocket, buffer, sizeof(buffer), 0);
@@ -104,11 +106,8 @@ public:
         {
             throw std::runtime_error("Conexao fechada pelo outro lado.");
         }
-    }
 
-    void SetSocketID(int id)
-    {
-        ID_SOCKET = id;
+        std::cout << "nome enviado.";
     }
 
     void SetNames(std::string server, std::string client)
@@ -124,7 +123,7 @@ public:
     }
 };
 
-int BaseSocket::port = 5086;
+int const BaseSocket::port = 5086;
 int const BaseSocket::NUMBER_CONNECTIONS = 1;
 std::string BaseSocket::clientUsername = "client_default";
 std::string BaseSocket::serverUsername = "server_default";
@@ -153,7 +152,7 @@ public:
             throw std::runtime_error(e.what());
         }
 
-        SetSocketID(1);
+        ID_SOCKET = 1;
     }
 
     ~ClassServerSocket()
@@ -165,7 +164,9 @@ public:
 
     bool AcceptConn()
     {
+        std::cout << "esperando aceitar.";
         OtherSocket = accept(MySocket, NULL, NULL);
+
         if (OtherSocket == INVALID_SOCKET)
         {
             return true;
@@ -229,7 +230,7 @@ public:
             throw std::runtime_error(e.what());
         }
 
-        SetSocketID(2);
+        ID_SOCKET = 2;
     }
 
     void ClientConnectToServer(const char *IP, std::string ClientUsername)
@@ -239,7 +240,7 @@ public:
             SetDataService(IP);
 
             ConnServer();
-
+            std::cout << "Conexao realizada.";
             RecvUsername();
             std::cout << "username do servidor: " << serverUsername;
             const char *username = (const char *)&ClientUsername;
@@ -254,18 +255,14 @@ public:
         }
     }
 
+private:
     void ConnServer()
     {
-
-        do
-        {
-            iResult = connect(MySocket, (SOCKADDR *)&service, sizeof(service));
-            std::cout << GetLastError();
-
-        } while (iResult != 0);
+        iResult = connect(MySocket, (SOCKADDR *)&service, sizeof(service));
         if (iResult == SOCKET_ERROR)
         {
             iResult = closesocket(MySocket);
+
             if (iResult == SOCKET_ERROR)
             {
                 throw std::runtime_error("Erro em fechar o socket apos falha.");
